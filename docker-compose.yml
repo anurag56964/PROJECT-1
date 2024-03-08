@@ -1,0 +1,29 @@
+version: "3"
+services:
+  db:
+    container_name: mydb
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - phr_network
+  app:
+    container_name: myapp
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SQL_HOST: "db"
+      SQL_DATABASE: "HEALTHCARE"
+      SQL_USER: "root"
+      SQL_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - phr_network
+
+networks:
+  phr_network:
+    driver: bridge
